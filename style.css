@@ -51,17 +51,17 @@ a{
     width:13%;
     margin-top:20%;
 }
-#card-1{
+#one{
     transform: rotate(-40deg);
     z-index:1
 }
-#card-2{
+#two{
     transform: rotate(0deg);
     z-index:1;
     margin-top:-20%;
     margin-left:55%
 }
-#card-3{
+#three{
     transform: rotate(50deg);
     z-index:1;
     margin-top:-10%;
@@ -89,4 +89,9 @@ a{
     position: absolute;
     top:90%;
 
+}
+.container:hover{
+   width:15%;
+   height: 300px;
+   border: 2px solid salmon;
 }

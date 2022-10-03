@@ -1,36 +1,48 @@
-   let index1,index2,index3="";
+    let catObjects = {one:0  , two: 0 , three:0}
    $(document).ready(function(){
             $("#myModal").modal('show');
     });
-// function getRandomIndex(){
-//     return Math.floor(Math.random()*50)
-// }
+function getRandomIndex(){
+    return Math.floor(Math.random()*50)
+}
 
-//     function getCat(){
-//         index1=getRandomIndex()
-//         index2=getRandomIndex()
-//         index3=getRandomIndex()
+function getData(key){
+    let tempData = null
+    let index= getRandomIndex()
 
-        
-//             return fetch(`http://api.worldbank.org/v2/country/?format=json`)
-//              .then((response) => response.json())
-//              .then((json) => {
-//              index1= json[1][index1]
-//              if(index1["region"]["value"]=="Aggregates"){
-//                 index1=getRandomIndex()
-//                 document.getElementById("test").innerText =index1["region"]["value"]
+	fetch('http://api.worldbank.org/v2/country/?format=json')
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(data) {
+		tempData = data[1][index]
+        while(tempData.capitalCity==""){
+            let index= getRandomIndex()
+            tempData= data[1][index]
+        }
 
-//              }else{
-//                 document.getElementById("test").innerText =index1["region"]["value"]
+            updateobj(key,tempData)
+          
+
+			
+		});
+}
+function updateobj(key, tempData){
+catObjects[key]=tempData
+if(key=="three"){
+    updated()
+}
 
 
-//              }
+}
 
-             
+for (country in catObjects){
+   getData(country);
+    
+}
 
-//              })
-//              .catch((error) => {
-//                console.error(error);
-//              });
-         
-//          }
+function updated(){
+   for(country in catObjects){
+    document.getElementById(country).innerText=catObjects[country]["region"]["value"]
+}
+}
