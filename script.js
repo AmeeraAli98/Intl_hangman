@@ -1,8 +1,47 @@
-   let playerOn=true
+   let GameState ="round-1"
+   let score =0;
    let catObjects = {one:0  , two: 0 , three:0}
-   $(document).ready(function(){
+
+
+   function configState(){
+    console.log(GameState)
+    if (GameState=="round-1"){
+        //hide board
+        $(document).ready(function(){
             $("#myModal").modal('show');
+            $(".modal-body").text("In this game, you'll be quizzed in general geographyTo start, pick a question category from the cards")
     });
+        document.getElementById("gameBox").style.visibility="hidden"
+        document.getElementById('side-box').style.visibility="hidden"
+
+        getCard();
+
+   }else if(GameState=="question"){
+    document.getElementById('side-box').style.visibility="visible"
+    document.getElementById('score-text').innerText=score
+    document.getElementById('sleeve').style.visibility="hidden"
+    document.getElementById('hand').style.visibility="hidden"
+    let cards = document.getElementsByClassName("container")
+    cards=[...cards]
+    cards.forEach(card=>card.style.visibility="hidden")
+    document.getElementById("gameBox").style.visibility="visible"
+
+   }
+   else if(GameState=="round-2"){
+    $("#myModal").modal("hide")
+    //show card and hands and sleeves
+    document.getElementById('sleeve').style.visibility="visible"
+    document.getElementById('hand').style.visibility="visible"
+    let cards = document.getElementsByClassName("container")
+    cards=[...cards]
+    cards.forEach(card=>card.style.visibility="visible")
+    document.getElementById("gameBox").style.visibility="hidden"
+    getCard();
+
+
+   }
+   }
+  
 function getRandomIndex(){
     return Math.floor(Math.random()*50)
 }
@@ -30,31 +69,31 @@ function getData(key){
 }
 function updateobj(key, tempData){
 catObjects[key]=tempData
+console.log(catObjects)
 if(key=="three"){
     updated()
 }
 
 
 }
+function getCard(){
 
 for (country in catObjects){
    getData(country);
     
 }
-
+}
 function updated(){
    for(country in catObjects){
+    let countrycard = document.getElementById(country)
+   countrycard.innerText=catObjects[country]["region"]["value"]
+    console.log("country in loop" + country)
+    console.log("city"+catObjects[country]["region"]["value"])
+    countrycard.addEventListener("click",()=>{
+        //game state
+        GameState="question"
+        configState()
 
-    document.getElementById(country).innerText=catObjects[country]["region"]["value"]
-    document.getElementById(country).addEventListener("click",()=>{
-        //disappear hand and sleeves and cards
-        //turn into function on/off
-
-        document.getElementById('sleeve').style.visibility="hidden"
-        document.getElementById('hand').style.visibility="hidden"
-        let cards = document.getElementsByClassName("container")
-        cards=[...cards]
-        cards.forEach(card=>card.style.visibility="hidden")
         prep(country)
     })
 }
@@ -65,7 +104,7 @@ function prep(country){
     let userBox = document.getElementById("userBox")
     // //make div, set content to what's the capital of name
     let a = catObjects[country]["capitalCity"]
-    a= a.trim()
+    a= a.split(" ").join('')
     let lineNo = a.length;
     for(let i=0;i<lineNo;i++){
        let line= document.createElement("div")
@@ -99,54 +138,66 @@ function prep(country){
     }
 
     let mistakes=0;
-    function checkLet(letter,a,userInput){
-        if(userInput.length==1){
-            letter = letter.toUpperCase();
-        }
-        
-        if (a.includes(letter)){
-            
-             let lineId= a.indexOf(letter)
-             let answerLength= a.length
-             if(answerLength-1==lineId){
+    function checkLet(letter,a,userInput){   
+        let aCopy= a.toLowerCase();
+        aCopy=[...aCopy]
+        if (aCopy.includes(letter)){
+                 let lineId =[]
+             aCopy.forEach((ele, i)=>{
+              if(ele==letter){
+                  lineId.push(i)
+              }
+             })
+             let answerLength = a.length
+             
+             if(userInput.length==answerLength){
                 win()
+                
              }else{
-                let targetBox= document.getElementById(`${lineId}`)
-                targetBox.innerText=letter
+                lineId.forEach(index=>{
+                    let targetBox= document.getElementById(`${index}`)
+            targetBox.innerText=letter
+                });
              }
-              
-    
-           
-    
-        }else{
-            if(mistakes==3){
-                //block board
-                alert("you've lost")
             }else{
-                mistakes++;
-                addBombs(mistakes)
-
-            }
-            
-        }
-        //add to line
-    }
+                    mistakes++;
+                    addBombs(mistakes);
+                   
+                }
+            }  
+    
+        
     function win(){
+        score= score+5
+        GameState="round-2"
+        document.getElementById('score-text').innerText=score
+        $(".modal-footer").append('<button type="button" onClick="configState()" >Continue</button>')
         //block  and show modal
-        alert("win")  
+        $("#myModal").modal('show');
+        $(".modal-header").text("Score!")
+        $(".modal-body").text("You've answered correctly\n answer another and earn more points?")
 
+        
     }
+
+    
     function addBombs(mistakes){
         let bombBox = document.getElementById("bomb");
         if(mistakes==1){
-            bombBox.innerHTML="<img class='bombPic' src='https://cdn-icons-png.flaticon.com/512/3002/3002390.png'/>"
+            bombBox.innerHTML="<img class='bombPic' src='pictures/bomb1.gif'/>"
 
         }else if(mistakes==2){
             bombBox.innerHTML="<img class='bombPic' src='https://cdn-icons-png.flaticon.com/512/236/236505.png'>"
 
         }
         else if (mistakes==3){
-            bombBox.innerHTML="<img class='bombPic' src='https://cdn-icons-png.flaticon.com/512/1086/1086944.png'>"
+            $(".modal-footer").append('<button type="button" onClick="configState()" >Continue</button>')
+            //block  and show modal
+            $("#myModal").modal('show');
+            $(".modal-header").text("Oh no!")
+            $(".modal-body").text("You've run out of tries\n play again?")
+            bombBox.innerHTML="<img class='bombPic' src='https://cdn-icons-png.flaticon.com/512/236/236505.png'>"
 
         }
     }
+    configState()

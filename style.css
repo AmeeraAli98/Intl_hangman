@@ -43,9 +43,10 @@ a{
     
 }
 .container{
-    height:210px;
+    height:220px;
     width:13%;
     margin-top:20%;
+
 }
 #one{
     transform: rotate(-40deg);
@@ -68,10 +69,10 @@ a{
 }
 #hand{
     width: 45%;
-    height:45%;
+    height:50%;
     margin-left: 35%;
     position: absolute;
-    bottom:-5%;
+    bottom:-2%;
     z-index: 1;
 }
 #sleeve{
@@ -102,20 +103,22 @@ a{
 }
 #gameBox{
     border: 2px solid yellow;
-    width:57%;
+    width:55%;
     flex-direction: column;
-   margin-left: 23%;
-   margin-top:-25%;
-   height: 13rem
+   margin-left: 24%;
+   margin-top:-24%;
+   height: 13rem;
+
 
 }
  .line{
     display:inline-block;
-    margin-left:10px;
-    width:5%;
-    height:5%;
-    border-bottom: 2px solid black;
+    width:6%;
+    height:2rem;
     text-align: center;
+    margin-left:2px;
+    margin-right:2px;
+    border-bottom: 2px solid black;
 } 
 
 .letter{
@@ -125,20 +128,23 @@ a{
     margin-left: 1%;
     margin-bottom:1%
 }
-#bomb{
-    background:yellow;
-    width:16%;
-    height:6rem;
-    margin-left:3%;
-    margin-top:-10%;
-    text-align: center;
+
+#welcome{
+    width:50%;
+    margin: 0 auto;
+    margin-top: 10%;
 }
-.bombPic{
+
+#side-box{
+  width:50%;
+  height: 450px;
+  align-items: center;
+  margin-top: -25%;
+  margin-left: -13%;
+}
+.item{
     width:40%;
-    height:60%;
-    margin:5px;
-    margin-top:13%;
-}
-#bombCon{
-    flex-direction: column;
+    background-color:white;
+    height:150px;
+    text-align: center;
 }
