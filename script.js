@@ -6,7 +6,6 @@
 
 
    function configState(){
-    console.log(GameState)
     if (GameState=="round-1"){
         //hide board
         $(document).ready(function(){
@@ -70,8 +69,9 @@ function getData(key){
 }
 function updateobj(key, tempData){
 catObjects[key]=tempData
-console.log(catObjects)
-if(key=="three"){
+let values =Object.values(catObjects)
+let truth =values.every(value=>value!="0")
+if(truth==true){
     updated()
 }
 
@@ -84,20 +84,31 @@ for (country in catObjects){
     
 }
 }
+
 function updated(){
-   for(country in catObjects){
-    let countrycard = document.getElementById(country)
-   countrycard.innerText=catObjects[country]["name"]
-    countrycard.addEventListener("click",()=>{
-        //game state
-        GameState="question"
-        prep(country)
-        configState()
-    })
-}
+    console.log(catObjects)
+let card1 = document.getElementById("one");
+let card2 = document.getElementById("two");
+let card3 = document.getElementById("three");
+
+card1.innerText=catObjects["one"]["name"]
+card2.innerText=catObjects["two"]["name"]
+card3.innerText=catObjects["three"]["name"]
+card1.addEventListener("click",()=>{
+    prep("one")
+    
+})
+card2.addEventListener("click",()=>{
+    prep("two")
+    
+})
+card3.addEventListener("click",()=>{
+    prep("three")
+    
+})
+
 }
 function prep(country){
-    
     let q =catObjects[country]["name"]
     let questionGrid= document.getElementById("question").innerText="What is the capital of " + q
     let userBox = document.getElementById("userBox")
@@ -105,6 +116,7 @@ function prep(country){
     let a = catObjects[country]["capitalCity"]
     a= a.split(" ").join('')
     let lineNo = a.length;
+    userBox.innerHTML=""
     for(let i=0;i<lineNo;i++){
        let line= document.createElement("div")
        line.className="line"
@@ -113,6 +125,8 @@ function prep(country){
 
        userBox.appendChild(line)
     
+       GameState="question"
+       configState()
 
     }
     // //make alphabet grid
@@ -121,7 +135,7 @@ function prep(country){
     let alphaGrid=document.getElementById("alphaGrid")
    
     let userInput =[];
-    if(isAlpha==false){
+    alphaGrid.innerHTML=""
     alphabet.forEach(char=>{
         let letter=document.createElement('div')
         letter.className = 'letter'
@@ -136,10 +150,11 @@ function prep(country){
     })
     isAlpha=true
     }
-    }
+    
 
     let mistakes=0;
-    function checkLet(letter,a,userInput){   
+    function checkLet(letter,a,userInput){  
+       
         let aCopy= a.toLowerCase();
         aCopy=[...aCopy]
         if (aCopy.includes(letter)){
@@ -151,7 +166,6 @@ function prep(country){
               }
              })
              let answerLength = a.length
-                console.log(allEnteredLetter)
              if(allEnteredLetter.length==answerLength){
                 win()
                 
@@ -170,6 +184,8 @@ function prep(country){
     
         
     function win(){
+        let sound2= document.getElementById("win")
+            sound2.play()
         score= score+5
         GameState="round-2"
         document.getElementById('score-text').innerText=score
@@ -186,19 +202,22 @@ function prep(country){
     function addBombs(mistakes){
         let bombBox = document.getElementById("bomb");
         if(mistakes==1){
+            let sound= document.getElementById("loss")
+            sound.play()
             bombBox.innerHTML="<img class='bombPic' src='pictures/bomb1.gif'/>"
 
         }else if(mistakes==2){
-            bombBox.innerHTML="<img class='bombPic' src='https://cdn-icons-png.flaticon.com/512/236/236505.png'>"
+            sound.play()
+            bombBox.innerHTML="<img class='bombPic' src='pictures/bomb2.gif'>"
 
         }
         else if (mistakes==3){
-            $(".modal-footer").append('<button type="button" onClick="configState()" >Continue</button>')
             //block  and show modal
+            sound.play()
             $("#myModal").modal('show');
             $(".modal-header").text("Oh no!")
             $(".modal-body").text("You've run out of tries\n play again?")
-            bombBox.innerHTML="<img class='bombPic' src='https://cdn-icons-png.flaticon.com/512/236/236505.png'>"
+            bombBox.innerHTML="<img class='bombPic' src='pictures/bomb3.gif'>"
 
         }
     }
