@@ -1,5 +1,7 @@
    let GameState ="round-1"
+   let allEnteredLetter = []
    let score =0;
+   let isAlpha = false
    let catObjects = {one:0  , two: 0 , three:0}
 
 
@@ -17,6 +19,7 @@
         getCard();
 
    }else if(GameState=="question"){
+    
     document.getElementById('side-box').style.visibility="visible"
     document.getElementById('score-text').innerText=score
     document.getElementById('sleeve').style.visibility="hidden"
@@ -36,9 +39,7 @@
     cards=[...cards]
     cards.forEach(card=>card.style.visibility="visible")
     document.getElementById("gameBox").style.visibility="hidden"
-    getCard();
-
-
+    getCard()
    }
    }
   
@@ -86,19 +87,17 @@ for (country in catObjects){
 function updated(){
    for(country in catObjects){
     let countrycard = document.getElementById(country)
-   countrycard.innerText=catObjects[country]["region"]["value"]
-    console.log("country in loop" + country)
-    console.log("city"+catObjects[country]["region"]["value"])
+   countrycard.innerText=catObjects[country]["name"]
     countrycard.addEventListener("click",()=>{
         //game state
         GameState="question"
-        configState()
-
         prep(country)
+        configState()
     })
 }
 }
 function prep(country){
+    
     let q =catObjects[country]["name"]
     let questionGrid= document.getElementById("question").innerText="What is the capital of " + q
     let userBox = document.getElementById("userBox")
@@ -122,6 +121,7 @@ function prep(country){
     let alphaGrid=document.getElementById("alphaGrid")
    
     let userInput =[];
+    if(isAlpha==false){
     alphabet.forEach(char=>{
         let letter=document.createElement('div')
         letter.className = 'letter'
@@ -134,7 +134,8 @@ function prep(country){
        })
        alphaGrid.appendChild(letter)
     })
-
+    isAlpha=true
+    }
     }
 
     let mistakes=0;
@@ -146,11 +147,12 @@ function prep(country){
              aCopy.forEach((ele, i)=>{
               if(ele==letter){
                   lineId.push(i)
+                  allEnteredLetter.push(i)
               }
              })
              let answerLength = a.length
-             
-             if(userInput.length==answerLength){
+                console.log(allEnteredLetter)
+             if(allEnteredLetter.length==answerLength){
                 win()
                 
              }else{
@@ -200,4 +202,6 @@ function prep(country){
 
         }
     }
-    configState()
+if(GameState=="round-1"){
+        configState()
+}
