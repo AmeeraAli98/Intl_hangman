@@ -3,8 +3,9 @@
    let score =0;
    let isAlpha = false
    let catObjects = {one:0  , two: 0 , three:0}
+   let ctnBtn = document.getElementById("ctnBtn")
 
-
+ 
    function configState(){
     if (GameState=="round-1"){
         //hide board
@@ -91,19 +92,24 @@ let card1 = document.getElementById("one");
 let card2 = document.getElementById("two");
 let card3 = document.getElementById("three");
 
-card1.innerText=catObjects["one"]["name"]
-card2.innerText=catObjects["two"]["name"]
-card3.innerText=catObjects["three"]["name"]
+card1.innerText=catObjects["one"]["region"]["value"]
+card2.innerText=catObjects["two"]["region"]["value"]
+card3.innerText=catObjects["three"]["region"]["value"]
 card1.addEventListener("click",()=>{
     prep("one")
+    allEnteredLetter=[]
     
 })
 card2.addEventListener("click",()=>{
     prep("two")
+    allEnteredLetter=[]
+
     
 })
 card3.addEventListener("click",()=>{
     prep("three")
+    allEnteredLetter=[]
+
     
 })
 
@@ -114,7 +120,7 @@ function prep(country){
     let userBox = document.getElementById("userBox")
     // //make div, set content to what's the capital of name
     let a = catObjects[country]["capitalCity"]
-    a= a.split(" ").join('')
+    a= a.split(" ").filter(l=>l!="'" && l!="-").join('')
     let lineNo = a.length;
     userBox.innerHTML=""
     for(let i=0;i<lineNo;i++){
@@ -155,8 +161,9 @@ function prep(country){
     let mistakes=0;
     function checkLet(letter,a,userInput){  
        
-        let aCopy= a.toLowerCase();
+        let aCopy= a.toLowerCase()
         aCopy=[...aCopy]
+        aCopy = aCopy.filter(c=>c!="'" && c!="-")
         if (aCopy.includes(letter)){
                  let lineId =[]
              aCopy.forEach((ele, i)=>{
@@ -166,6 +173,7 @@ function prep(country){
               }
              })
              let answerLength = a.length
+             console.log(allEnteredLetter)
              if(allEnteredLetter.length==answerLength){
                 win()
                 
@@ -189,8 +197,9 @@ function prep(country){
         score= score+5
         GameState="round-2"
         document.getElementById('score-text').innerText=score
-        $(".modal-footer").append('<button type="button" onClick="configState()" >Continue</button>')
+       
         //block  and show modal
+        ctnBtn.style.visibility="visible"
         $("#myModal").modal('show');
         $(".modal-header").text("Score!")
         $(".modal-body").text("You've answered correctly\n answer another and earn more points?")
@@ -204,20 +213,21 @@ function prep(country){
         if(mistakes==1){
             let sound= document.getElementById("loss")
             sound.play()
-            bombBox.innerHTML="<img class='bombPic' src='pictures/bomb1.gif'/>"
+            bombBox.innerHTML="bomb</br><img class='bombPic' src='pictures/bomb1.gif'/>"
 
         }else if(mistakes==2){
             sound.play()
-            bombBox.innerHTML="<img class='bombPic' src='pictures/bomb2.gif'>"
+            bombBox.innerHTML="bomb</br><img class='bombPic' src='pictures/bomb2.gif'>"
 
         }
         else if (mistakes==3){
             //block  and show modal
+            ctnBtn.style.visibility="visible"
             sound.play()
             $("#myModal").modal('show');
             $(".modal-header").text("Oh no!")
             $(".modal-body").text("You've run out of tries\n play again?")
-            bombBox.innerHTML="<img class='bombPic' src='pictures/bomb3.gif'>"
+            bombBox.innerHTML="bomb</br><img class='bombPic' src='pictures/bomb3.gif'>"
 
         }
     }

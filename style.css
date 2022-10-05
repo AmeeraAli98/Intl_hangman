@@ -153,3 +153,7 @@ a{
     width:60%;
     height:100px;
 }
+.modal-footer > button{
+visibility:hidden ;
+
+}
