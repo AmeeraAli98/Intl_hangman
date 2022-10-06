@@ -1,7 +1,6 @@
    let GameState ="round-1"
    let allEnteredLetter = []
    let score =0;
-   let isAlpha = false
    let catObjects = {one:0  , two: 0 , three:0}
    let ctnBtn = document.getElementById("ctnBtn")
 
@@ -10,11 +9,11 @@
     if (GameState=="round-1"){
         //hide board
         $(document).ready(function(){
-            $("#myModal").modal('show');
-            $(".modal-body").text("In this game, you'll be quizzed in general geographyTo start, pick a question category from the cards")
+                $("#myModal").modal('show');
+                $(".modal-body").text("In this game, you'll be quizzed in general geographyTo start, pick a question category from the cards")
     });
-        document.getElementById("gameBox").style.visibility="hidden"
-        document.getElementById('side-box').style.visibility="hidden"
+         document.getElementById("gameBox").style.visibility="hidden"
+         document.getElementById('side-box').style.visibility="hidden"
 
         getCard();
 
@@ -69,12 +68,12 @@ function getData(key){
 		});
 }
 function updateobj(key, tempData){
-catObjects[key]=tempData
-let values =Object.values(catObjects)
-let truth =values.every(value=>value!="0")
-if(truth==true){
-    updated()
-}
+    catObjects[key]=tempData
+    let values =Object.values(catObjects)
+    let truth =values.every(value=>value!="0")
+    if(truth==true){
+        updated()
+    }
 
 
 }
@@ -96,17 +95,23 @@ card1.innerText=catObjects["one"]["region"]["value"]
 card2.innerText=catObjects["two"]["region"]["value"]
 card3.innerText=catObjects["three"]["region"]["value"]
 card1.addEventListener("click",()=>{
+    GameState="question"
+    configState()
     prep("one")
     allEnteredLetter=[]
     
 })
 card2.addEventListener("click",()=>{
+    GameState="question"
+    configState()
     prep("two")
     allEnteredLetter=[]
 
     
 })
 card3.addEventListener("click",()=>{
+    GameState="question"
+    configState()
     prep("three")
     allEnteredLetter=[]
 
@@ -131,8 +136,7 @@ function prep(country){
 
        userBox.appendChild(line)
     
-       GameState="question"
-       configState()
+       
 
     }
     // //make alphabet grid
@@ -154,7 +158,6 @@ function prep(country){
        })
        alphaGrid.appendChild(letter)
     })
-    isAlpha=true
     }
     
 
@@ -231,6 +234,7 @@ function prep(country){
 
         }
     }
+    //first set up
 if(GameState=="round-1"){
         configState()
 }
