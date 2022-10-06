@@ -212,6 +212,8 @@ function prep(country){
 
     
     function addBombs(mistakes){
+        let sound= document.getElementById("loss")
+
         let bombBox = document.getElementById("bomb");
         if(mistakes==1){
             let sound= document.getElementById("loss")
